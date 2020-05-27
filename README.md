@@ -1,2 +1,5 @@
-# 2020-05-otus-spring-Popov
-Otus Spring 2020-05 homeworks
+# Домашние задания курса OTUS "Spring framework"
+Группа **2020-05**
+## Студент:
+**Валентин Попов**
+valeo.popov@gmail.com
