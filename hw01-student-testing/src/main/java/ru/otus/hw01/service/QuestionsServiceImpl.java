@@ -4,32 +4,31 @@ import ru.otus.hw01.dao.QuestionDao;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class QuestionsServiceImpl implements QuestionsService {
+    private static final String QUESTION_DIVIDER = "-----------------------------------------";
 
     private final QuestionDao dao;
+    private final PrintService printService;
 
-    public QuestionsServiceImpl(QuestionDao dao) {
+    public QuestionsServiceImpl(QuestionDao dao, PrintService printService) {
         this.dao = dao;
+        this.printService = printService;
     }
 
     @Override
     public void printAll(OutputStream out) {
-        String divider = IntStream.range(0, 20).mapToObj(i -> "-").collect(Collectors.joining(""));
-        try (PrintStream printStream = new PrintStream(out)) {
+        try {
             dao.getAll().forEach(question -> {
-                printStream.println(String.format("Question %d (%s): %s", question.getNumber(),
+                printService.println(String.format("Question %d (%s): %s", question.getNumber(),
                         question.getType().getValue(), question.getText()));
                 question.getAnswerVariants().forEach(answerVariant -> {
-                        printStream.println(String.format("%d) %s", answerVariant.getNumber(), answerVariant.getText()));
+                    printService.println(String.format("%d) %s", answerVariant.getNumber(), answerVariant.getText()));
                 });
-                printStream.println(divider);
+                printService.println(QUESTION_DIVIDER);
             });
         } catch (IOException e) {
-            System.err.println("Error on loading questions...");
+            printService.printError("Error on loading questions: " + e.getMessage());
         }
     }
 }

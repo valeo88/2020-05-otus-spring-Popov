@@ -8,8 +8,20 @@
         <constructor-arg name="fileName" value="questions.csv"/>
     </bean>
 
+    <bean id="printService" class="ru.otus.hw01.service.PrintServiceImpl">
+        <constructor-arg name="outputStream">
+            <bean id="java.lang.System.out"
+                  class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"/>
+        </constructor-arg>
+        <constructor-arg name="errorStream">
+            <bean id="java.lang.System.err"
+                  class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"/>
+        </constructor-arg>
+    </bean>
+
     <bean id="questionsService" class="ru.otus.hw01.service.QuestionsServiceImpl">
         <constructor-arg name="dao" ref="questionDao"/>
+        <constructor-arg name="printService" ref="printService"/>
     </bean>
 
 </beans>

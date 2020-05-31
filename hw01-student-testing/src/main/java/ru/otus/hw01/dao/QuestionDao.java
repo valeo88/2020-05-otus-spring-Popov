@@ -37,13 +37,17 @@ public class QuestionDao {
     private Question parseQuestion(String source) {
         String[] parts = source.split(";");
         Question question = new Question();
-        question.setNumber(Integer.parseInt(parts[0]));
-        question.setType(QuestionType.fromString(parts[1]));
-        question.setText(parts[2]);
-        if (QuestionType.CHOICE.equals(question.getType())) {
-            List<AnswerVariant> answerVariants = Stream.of(parts[3].split("\\|"))
-                    .map(this::parseAnswerVariant).collect(Collectors.toList());
-            question.setAnswerVariants(answerVariants);
+        try {
+            question.setNumber(Integer.parseInt(parts[0]));
+            question.setType(QuestionType.fromString(parts[1]));
+            question.setText(parts[2]);
+            if (QuestionType.CHOICE.equals(question.getType())) {
+                List<AnswerVariant> answerVariants = Stream.of(parts[3].split("\\|"))
+                        .map(this::parseAnswerVariant).collect(Collectors.toList());
+                question.setAnswerVariants(answerVariants);
+            }
+        } catch (Exception e) {
+            throw new QuestionParseException("Error on parsing question", e);
         }
         return question;
     }
