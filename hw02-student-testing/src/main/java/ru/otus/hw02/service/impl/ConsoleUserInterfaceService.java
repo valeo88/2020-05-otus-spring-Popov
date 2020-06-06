@@ -1,5 +1,6 @@
 package ru.otus.hw02.service.impl;
 
+import ru.otus.hw02.domain.UserTestSettings;
 import ru.otus.hw02.service.QuestionsService;
 import ru.otus.hw02.service.UserInterfaceService;
 
@@ -14,9 +15,12 @@ public class ConsoleUserInterfaceService implements UserInterfaceService {
     private final Scanner scanner = new Scanner(System.in);
 
     private final QuestionsService questionsService;
+    private final UserTestSettings userTestSettings;
 
-    public ConsoleUserInterfaceService(QuestionsService questionsService) {
+    public ConsoleUserInterfaceService(QuestionsService questionsService,
+                                       UserTestSettings userTestSettings) {
         this.questionsService = questionsService;
+        this.userTestSettings = userTestSettings;
     }
 
     @Override

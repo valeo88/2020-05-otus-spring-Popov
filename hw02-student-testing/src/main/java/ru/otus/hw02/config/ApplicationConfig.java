@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import ru.otus.hw02.dao.QuestionDao;
+import ru.otus.hw02.domain.UserTestSettings;
 import ru.otus.hw02.service.QuestionsService;
 import ru.otus.hw02.service.UserInterfaceService;
 import ru.otus.hw02.service.impl.ConsoleUserInterfaceService;
@@ -19,8 +20,10 @@ public class ApplicationConfig {
     @Value("${questions.filepath}")
     private String questionsFileName = "questions.csv";
 
-    @Value("${minCorrectAnswers}")
-    private int minCorrectAnswers = 1;
+    @Value("${questionsCount}")
+    private int questionsCount = 1;
+    @Value("${minCorrectAnswersForCredit}")
+    private int minCorrectAnswersForCredit = 1;
 
     @Bean
     QuestionDao questionDao() {
@@ -34,6 +37,7 @@ public class ApplicationConfig {
 
     @Bean
     UserInterfaceService userInterfaceService() {
-        return new ConsoleUserInterfaceService(questionsService());
+        UserTestSettings userTestSettings = new UserTestSettings(questionsCount, minCorrectAnswersForCredit);
+        return new ConsoleUserInterfaceService(questionsService(),userTestSettings);
     }
 }
