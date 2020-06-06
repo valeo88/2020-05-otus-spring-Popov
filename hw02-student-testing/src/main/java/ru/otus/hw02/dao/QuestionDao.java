@@ -1,10 +1,10 @@
 package ru.otus.hw02.dao;
 
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
-import ru.otus.hw01.domain.AnswerVariant;
-import ru.otus.hw01.domain.Question;
-import ru.otus.hw01.domain.QuestionType;
+import ru.otus.hw02.domain.AnswerVariant;
+import ru.otus.hw02.domain.Question;
+import ru.otus.hw02.domain.QuestionType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class QuestionDao {
     private final Resource data;
 
     public QuestionDao(String fileName) {
-        this.data = new ClassPathResource(fileName);
+        this.data = new PathResource(fileName);
     }
 
     public List<Question> getAll() throws IOException {
