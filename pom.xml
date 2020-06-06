@@ -19,6 +19,7 @@
 
     <modules>
         <module>hw01-student-testing</module>
+        <module>hw02-student-testing</module>
     </modules>
 
     <properties>
