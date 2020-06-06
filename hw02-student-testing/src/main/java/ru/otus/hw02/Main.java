@@ -11,7 +11,7 @@ public class Main {
                 new AnnotationConfigApplicationContext(Main.class);
 
         UserInterfaceService userInterfaceService = context.getBean(UserInterfaceService.class);
-        userInterfaceService.showAllQuestions();
+        userInterfaceService.test();
 
         context.close();
     }
