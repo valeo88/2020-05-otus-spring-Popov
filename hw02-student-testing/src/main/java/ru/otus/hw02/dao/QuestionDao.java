@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 public class QuestionDao {
     private final Resource data;
 
-    public QuestionDao(String fileName) {
-        this.data = new PathResource(fileName);
+    public QuestionDao(String filePath) {
+        this.data = new PathResource(filePath);
     }
 
     public List<Question> getAll() throws IOException {
