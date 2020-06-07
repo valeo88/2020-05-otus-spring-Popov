@@ -8,8 +8,8 @@ import org.springframework.context.annotation.PropertySource;
 import ru.otus.hw02.dao.QuestionDao;
 import ru.otus.hw02.domain.UserTestSettings;
 import ru.otus.hw02.service.QuestionsService;
-import ru.otus.hw02.service.UserInterfaceService;
-import ru.otus.hw02.service.impl.ConsoleUserInterfaceService;
+import ru.otus.hw02.service.StudentTestingService;
+import ru.otus.hw02.service.impl.ConsoleStudentTestingService;
 import ru.otus.hw02.service.impl.QuestionsServiceImpl;
 
 @Data
@@ -36,8 +36,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    UserInterfaceService userInterfaceService() {
+    StudentTestingService userInterfaceService() {
         UserTestSettings userTestSettings = new UserTestSettings(questionsCount, minCorrectAnswersForCredit);
-        return new ConsoleUserInterfaceService(questionsService(),userTestSettings);
+        return new ConsoleStudentTestingService(questionsService(),userTestSettings);
     }
 }

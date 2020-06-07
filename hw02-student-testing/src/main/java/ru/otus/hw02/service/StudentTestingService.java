@@ -1,6 +1,6 @@
 package ru.otus.hw02.service;
 
-public interface UserInterfaceService {
+public interface StudentTestingService {
     void showAllQuestions();
     void test();
 }

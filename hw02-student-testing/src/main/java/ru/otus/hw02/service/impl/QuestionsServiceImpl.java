@@ -26,4 +26,26 @@ public class QuestionsServiceImpl implements QuestionsService {
             throw new QuestionsLoadException("Error on loading questions.");
         }
     }
+
+    @Override
+    public boolean isAnswerCorrect(Question question, String answer) {
+        switch (question.getType()) {
+            case INPUT:
+                return !answer.isEmpty();
+            case CHOICE:
+                return !answer.isEmpty() && question.getAnswerVariants().stream()
+                        .anyMatch(answerVariant -> answerVariant.isCorrect()
+                                && answerVariant.getNumber() == parseAnswerNumber(answer));
+            default:
+                return false;
+        }
+    }
+
+    private int parseAnswerNumber(String answer) {
+        try {
+            return Integer.valueOf(answer);
+        } catch (Exception ignored) {
+            return Integer.MIN_VALUE;
+        }
+    }
 }

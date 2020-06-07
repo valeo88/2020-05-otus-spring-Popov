@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface QuestionsService {
     List<Question> getAll();
+    boolean isAnswerCorrect(Question question, String answer);
 }

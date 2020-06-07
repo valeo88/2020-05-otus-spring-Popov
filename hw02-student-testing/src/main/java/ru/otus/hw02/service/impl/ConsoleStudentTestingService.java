@@ -3,14 +3,14 @@ package ru.otus.hw02.service.impl;
 import ru.otus.hw02.domain.Question;
 import ru.otus.hw02.domain.UserTestSettings;
 import ru.otus.hw02.service.QuestionsService;
-import ru.otus.hw02.service.UserInterfaceService;
+import ru.otus.hw02.service.StudentTestingService;
 
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ConsoleUserInterfaceService implements UserInterfaceService {
+public class ConsoleStudentTestingService implements StudentTestingService {
     private static final String QUESTION_DIVIDER = "-----------------------------------------";
 
     private final PrintStream out = new PrintStream(System.out);
@@ -20,8 +20,8 @@ public class ConsoleUserInterfaceService implements UserInterfaceService {
     private final QuestionsService questionsService;
     private final UserTestSettings userTestSettings;
 
-    public ConsoleUserInterfaceService(QuestionsService questionsService,
-                                       UserTestSettings userTestSettings) {
+    public ConsoleStudentTestingService(QuestionsService questionsService,
+                                        UserTestSettings userTestSettings) {
         this.questionsService = questionsService;
         this.userTestSettings = userTestSettings;
     }
@@ -73,23 +73,7 @@ public class ConsoleUserInterfaceService implements UserInterfaceService {
     private boolean checkUserAnswer(Question question) {
         out.println("Please write your answer.");
         String answer = scanner.nextLine();
-        switch (question.getType()) {
-            case INPUT:
-                return !answer.isEmpty();
-            case CHOICE:
-                return !answer.isEmpty() && question.getAnswerVariants().stream()
-                        .anyMatch(answerVariant -> answerVariant.isCorrect()
-                                && answerVariant.getNumber() == parseAnswerNumber(answer));
-        }
-        return true;
-    }
-
-    private int parseAnswerNumber(String answer) {
-        try {
-            return Integer.valueOf(answer);
-        } catch (Exception ignored) {
-            return Integer.MIN_VALUE;
-        }
+        return questionsService.isAnswerCorrect(question, answer);
     }
 
     private void printResults(String userName, int correctAnswers) {
