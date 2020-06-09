@@ -40,8 +40,17 @@ public class ConsoleStudentTestingService implements StudentTestingService {
 
     @Override
     public void test() {
+        String userName = getUserName();
+        int correctAnswersCount = performTesting();
+        printResults(userName, correctAnswersCount);
+    }
+
+    private String getUserName() {
         ioService.writeText("What's your name and surname?");
-        String userName = ioService.readText();
+        return ioService.readText();
+    }
+
+    private int performTesting() {
         ioService.writeText("Ok, let's start testing!");
         AtomicInteger correctAnswersCount = new AtomicInteger(0);
         List<Question> allQuestions;
@@ -49,7 +58,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
             allQuestions = questionsService.getAll();
         } catch (Exception e) {
             ioService.writeText("Error on loading questions: " + e.getMessage());
-            return;
+            return 0;
         }
         allQuestions.stream()
                 .limit(userTestSettings.getQuestionsCount())
@@ -59,7 +68,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
                         correctAnswersCount.incrementAndGet();
                     }
                 });
-        printResults(userName, correctAnswersCount.get());
+        return correctAnswersCount.get();
     }
 
     private void printQuestionWithAnswers(Question question) {
