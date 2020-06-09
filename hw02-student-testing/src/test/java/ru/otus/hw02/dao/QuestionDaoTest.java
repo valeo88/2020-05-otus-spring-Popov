@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("QuestionDao test")
 class QuestionDaoTest {
-    private static final String correctFilePath = "src/test/resources/questions.csv";
-    private static final String incorrectFilePath = "src/test/resources/notexist.csv";
+    private static final String correctFilePath = "questions.csv";
+    private static final String incorrectFilePath = "notexist.csv";
 
     @DisplayName("Test loading questions from correct file")
     @Test
     void shouldReturnQuestionsIfResourceCorrect() throws IOException {
-        QuestionDao questionDao = new QuestionDao(correctFilePath);
+        QuestionDao questionDao = new QuestionDaoImpl(correctFilePath);
 
         List<Question> questions = questionDao.getAll();
 
@@ -28,7 +28,7 @@ class QuestionDaoTest {
     @DisplayName("Test loading questions from incorrect file")
     @Test
     void shouldReturnEmptyListIfResourceInCorrect() throws IOException {
-        QuestionDao questionDao = new QuestionDao(incorrectFilePath);
+        QuestionDao questionDao = new QuestionDaoImpl(incorrectFilePath);
 
         List<Question> questions = questionDao.getAll();
 

@@ -1,7 +1,8 @@
 package ru.otus.hw02.service.impl;
 
+import org.springframework.stereotype.Service;
+import ru.otus.hw02.config.UserTestSettings;
 import ru.otus.hw02.domain.Question;
-import ru.otus.hw02.domain.UserTestSettings;
 import ru.otus.hw02.service.QuestionsService;
 import ru.otus.hw02.service.StudentTestingService;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Service
 public class ConsoleStudentTestingService implements StudentTestingService {
     private static final String QUESTION_DIVIDER = "-----------------------------------------";
 

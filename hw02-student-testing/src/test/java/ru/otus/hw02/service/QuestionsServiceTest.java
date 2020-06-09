@@ -3,7 +3,7 @@ package ru.otus.hw02.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.hw02.dao.QuestionDao;
+import ru.otus.hw02.dao.QuestionDaoImpl;
 import ru.otus.hw02.domain.AnswerVariant;
 import ru.otus.hw02.domain.Question;
 import ru.otus.hw02.domain.QuestionType;
@@ -22,7 +22,7 @@ class QuestionsServiceTest {
 
     @BeforeEach
     void setUp() {
-        questionsService = new QuestionsServiceImpl(new QuestionDao(questionsFilePath));
+        questionsService = new QuestionsServiceImpl(new QuestionDaoImpl(questionsFilePath));
     }
 
     @DisplayName("Test return full questions list")
