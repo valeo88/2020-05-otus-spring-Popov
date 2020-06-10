@@ -19,6 +19,7 @@
 
     <modules>
         <module>hw01-student-testing</module>
+        <module>hw02-student-testing</module>
     </modules>
 
     <properties>
@@ -27,15 +28,52 @@
         <maven.compiler.target>11</maven.compiler.target>
         <spring.version>5.2.6.RELEASE</spring.version>
         <lombok.version>1.18.12</lombok.version>
+        <junit.jupiter.version>5.3.2</junit.jupiter.version>
+        <mockito-core.version>3.1.0</mockito-core.version>
+        <assertj-core.version>3.13.2</assertj-core.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!--region Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!--endregion-->
+            <!--region Test dependencies - JUnit Jupiter, AssertJ, Hamcrest, Mockito -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--endregion-->
         </dependencies>
     </dependencyManagement>
 
@@ -55,6 +93,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
