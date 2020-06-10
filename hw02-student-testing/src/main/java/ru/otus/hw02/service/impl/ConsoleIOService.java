@@ -3,15 +3,29 @@ package ru.otus.hw02.service.impl;
 import org.springframework.stereotype.Service;
 import ru.otus.hw02.service.IOService;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
 @Service
 public class ConsoleIOService implements IOService {
 
-    private final PrintStream out = new PrintStream(System.out);
-    private final PrintStream err = new PrintStream(System.err);
-    private final Scanner scanner = new Scanner(System.in);
+    private PrintStream out;
+    private PrintStream err;
+    private Scanner scanner;
+
+    public ConsoleIOService() {
+        this.out = new PrintStream(System.out);
+        this.err = new PrintStream(System.err);
+        this.scanner = new Scanner(System.in);
+    }
+
+    public ConsoleIOService(OutputStream out, OutputStream err, InputStream in) {
+        this.out = new PrintStream(out);
+        this.err = new PrintStream(err);
+        this.scanner = new Scanner(in);
+    }
 
     @Override
     public void writeText(String text) {

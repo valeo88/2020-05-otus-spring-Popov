@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.otus.hw02.domain.AnswerVariant;
 import ru.otus.hw02.domain.Question;
 import ru.otus.hw02.domain.QuestionType;
+import ru.otus.hw02.exception.QuestionsLoadException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class QuestionDaoImpl implements QuestionDao {
         this.data = new ClassPathResource(filePath);
     }
 
-    public List<Question> getAll() throws IOException {
+    public List<Question> getAll() throws QuestionsLoadException {
         if (data.exists() && data.isReadable()) {
             try ( BufferedReader reader = new BufferedReader(
                     new InputStreamReader(data.getInputStream())) ) {
@@ -33,6 +34,8 @@ public class QuestionDaoImpl implements QuestionDao {
                         .skip(1)
                         .map(this::parseQuestion)
                         .collect(Collectors.toList());
+            } catch (IOException e) {
+                throw new QuestionsLoadException("Error on load questions", e);
             }
         }
         return new ArrayList<>();
