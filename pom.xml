@@ -7,9 +7,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project Object Model -->
-    <!-- All POMs extend the Super POM unless explicitly set -->
-    <!--<parent>*</parent>-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+    </parent>
 
     <groupId>ru.otus</groupId>
     <artifactId>popov-otus-spring</artifactId>
@@ -20,6 +22,7 @@
     <modules>
         <module>hw01-student-testing</module>
         <module>hw02-student-testing</module>
+        <module>hw03-student-testing</module>
     </modules>
 
     <properties>
