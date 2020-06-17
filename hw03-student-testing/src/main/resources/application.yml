@@ -1,0 +1,6 @@
+questions:
+  filepath: questions.csv
+
+testing-settings:
+  questionsCount: 5
+  minCorrectAnswersForCredit: 2
