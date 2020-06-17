@@ -2,5 +2,6 @@ questions:
   filepath: questions.csv
 
 testing-settings:
+  locale: ru_RU
   questionsCount: 5
   minCorrectAnswersForCredit: 2

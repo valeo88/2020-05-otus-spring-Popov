@@ -1,5 +1,6 @@
 package ru.otus.hw03.service.impl;
 
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.otus.hw03.config.UserTestSettings;
 import ru.otus.hw03.domain.Question;
@@ -14,13 +15,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ConsoleStudentTestingService implements StudentTestingService {
     private static final String QUESTION_DIVIDER = "-----------------------------------------";
 
+    private final MessageSource messageSource;
     private final QuestionsService questionsService;
     private final UserTestSettings userTestSettings;
     private final IOService ioService;
 
-    public ConsoleStudentTestingService(QuestionsService questionsService,
+    public ConsoleStudentTestingService(MessageSource messageSource,
+                                        QuestionsService questionsService,
                                         UserTestSettings userTestSettings,
                                         IOService ioService) {
+        this.messageSource = messageSource;
         this.questionsService = questionsService;
         this.userTestSettings = userTestSettings;
         this.ioService = ioService;
@@ -34,7 +38,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
                 ioService.writeText(QUESTION_DIVIDER);
             });
         } catch (Exception e) {
-            ioService.writeError("Error on loading questions: " + e.getMessage());
+            ioService.writeError(messageSource.getMessage("error.loadingQuestions", new String[]{e.getMessage()}, userTestSettings.getLocale()));
         }
     }
 
@@ -46,7 +50,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
     }
 
     private String getUserName() {
-        ioService.writeText("What's your name and surname?");
+        ioService.writeText(messageSource.getMessage("question.whatsYourNameAndSurname", new String[]{}, userTestSettings.getLocale()));
         return ioService.readText();
     }
 
