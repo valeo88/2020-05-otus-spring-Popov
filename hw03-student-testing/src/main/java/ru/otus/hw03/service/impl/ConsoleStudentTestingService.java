@@ -2,6 +2,7 @@ package ru.otus.hw03.service.impl;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import ru.otus.hw03.config.ApplicationConfig;
 import ru.otus.hw03.config.UserTestSettings;
 import ru.otus.hw03.domain.Question;
 import ru.otus.hw03.service.IOService;
@@ -18,15 +19,18 @@ public class ConsoleStudentTestingService implements StudentTestingService {
     private final MessageSource messageSource;
     private final QuestionsService questionsService;
     private final UserTestSettings userTestSettings;
+    private final ApplicationConfig applicationConfig;
     private final IOService ioService;
 
     public ConsoleStudentTestingService(MessageSource messageSource,
                                         QuestionsService questionsService,
                                         UserTestSettings userTestSettings,
+                                        ApplicationConfig applicationConfig,
                                         IOService ioService) {
         this.messageSource = messageSource;
         this.questionsService = questionsService;
         this.userTestSettings = userTestSettings;
+        this.applicationConfig = applicationConfig;
         this.ioService = ioService;
     }
 
@@ -98,10 +102,10 @@ public class ConsoleStudentTestingService implements StudentTestingService {
     }
 
     private String getLocalizedMessage(String code) {
-        return messageSource.getMessage(code, new Object[]{}, userTestSettings.getLocale());
+        return messageSource.getMessage(code, new Object[]{}, applicationConfig.getLocale());
     }
 
     private String getLocalizedMessage(String code, Object[] params) {
-        return messageSource.getMessage(code, params, userTestSettings.getLocale());
+        return messageSource.getMessage(code, params, applicationConfig.getLocale());
     }
 }
