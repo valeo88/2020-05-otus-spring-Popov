@@ -10,7 +10,7 @@ public class Localization {
     @Bean
     public MessageSource messageSource() {
         var ms = new ReloadableResourceBundleMessageSource();
-        ms.setBasename("classpath:/il8n/bundle");
+        ms.setBasename("classpath:/i18n/bundle");
         ms.setDefaultEncoding("UTF-8");
         return ms;
     }

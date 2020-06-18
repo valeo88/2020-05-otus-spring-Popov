@@ -38,7 +38,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
                 ioService.writeText(QUESTION_DIVIDER);
             });
         } catch (Exception e) {
-            ioService.writeError(messageSource.getMessage("error.loadingQuestions", new String[]{e.getMessage()}, userTestSettings.getLocale()));
+            ioService.writeError(getLocalizedMessage("error.loadingQuestions", new String[]{e.getMessage()}));
         }
     }
 
@@ -50,18 +50,18 @@ public class ConsoleStudentTestingService implements StudentTestingService {
     }
 
     private String getUserName() {
-        ioService.writeText(messageSource.getMessage("question.whatsYourNameAndSurname", new String[]{}, userTestSettings.getLocale()));
+        ioService.writeText(getLocalizedMessage("question.whatsYourNameAndSurname"));
         return ioService.readText();
     }
 
     private int performTesting() {
-        ioService.writeText("Ok, let's start testing!");
+        ioService.writeText(getLocalizedMessage("stmt.startTesting"));
         AtomicInteger correctAnswersCount = new AtomicInteger(0);
         List<Question> allQuestions;
         try {
             allQuestions = questionsService.getAll();
         } catch (Exception e) {
-            ioService.writeText("Error on loading questions: " + e.getMessage());
+            ioService.writeText(getLocalizedMessage("error.loadingQuestions", new String[]{e.getMessage()}));
             return 0;
         }
         allQuestions.stream()
@@ -76,24 +76,32 @@ public class ConsoleStudentTestingService implements StudentTestingService {
     }
 
     private void printQuestionWithAnswers(Question question) {
-        ioService.writeText(String.format("Question %d (%s): %s", question.getNumber(),
-                question.getType().getValue(), question.getText()));
+        ioService.writeText(getLocalizedMessage("question.title", new Object[]{question.getNumber(),
+                question.getType().getValue(), question.getText()}));
         question.getAnswerVariants().forEach(answerVariant -> {
             ioService.writeText(String.format("%d) %s", answerVariant.getNumber(), answerVariant.getText()));
         });
     }
 
     private boolean checkUserAnswer(Question question) {
-        ioService.writeText("Please write your answer.");
+        ioService.writeText(getLocalizedMessage("stmt.writeAnswer"));
         String answer = ioService.readText();
         return questionsService.isAnswerCorrect(question, answer);
     }
 
     private void printResults(String userName, int correctAnswers) {
         if (correctAnswers >= userTestSettings.getMinCorrectAnswersForCredit()) {
-            ioService.writeText("Congratulations to " + userName + " for test pass!");
+            ioService.writeText(getLocalizedMessage("stmt.congratulation", new String[]{userName}));
         } else {
-            ioService.writeText(userName + " please try again :(");
+            ioService.writeText(getLocalizedMessage("stmt.tryAgain", new String[]{userName}));
         }
+    }
+
+    private String getLocalizedMessage(String code) {
+        return messageSource.getMessage(code, new Object[]{}, userTestSettings.getLocale());
+    }
+
+    private String getLocalizedMessage(String code, Object[] params) {
+        return messageSource.getMessage(code, params, userTestSettings.getLocale());
     }
 }
