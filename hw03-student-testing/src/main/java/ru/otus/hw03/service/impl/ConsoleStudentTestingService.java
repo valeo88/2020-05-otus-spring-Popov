@@ -81,7 +81,7 @@ public class ConsoleStudentTestingService implements StudentTestingService {
 
     private void printQuestionWithAnswers(Question question) {
         ioService.writeText(getLocalizedMessage("question.title", new Object[]{question.getNumber(),
-                question.getType().getValue(), question.getText()}));
+                getLocalizedMessage(question.getType().getValue()), question.getText()}));
         question.getAnswerVariants().forEach(answerVariant -> {
             ioService.writeText(String.format("%d) %s", answerVariant.getNumber(), answerVariant.getText()));
         });

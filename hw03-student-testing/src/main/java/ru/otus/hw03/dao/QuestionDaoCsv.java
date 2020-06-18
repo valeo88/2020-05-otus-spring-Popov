@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
+import ru.otus.hw03.config.ApplicationConfig;
 import ru.otus.hw03.domain.AnswerVariant;
 import ru.otus.hw03.domain.Question;
 import ru.otus.hw03.domain.QuestionType;
@@ -14,22 +15,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Repository
-public class QuestionDaoImpl implements QuestionDao {
+public class QuestionDaoCsv implements QuestionDao {
+    private static final String FILE_EXTENSION = ".csv";
 
-    private final Resource data;
+    private final Optional<Resource> data;
+    private final ApplicationConfig applicationConfig;
 
-    public QuestionDaoImpl(@Value("${questions.filepath}") String filePath) {
-        this.data = new ClassPathResource(filePath);
+    public QuestionDaoCsv(@Value("${questions.filepath}") String filePath,
+                          ApplicationConfig applicationConfig) {
+        this.data = getLocalizedResource(filePath, applicationConfig.getLocale());
+        this.applicationConfig = applicationConfig;
     }
 
     public List<Question> getAll() throws QuestionsLoadException {
-        if (data.exists() && data.isReadable()) {
+        if (data.isPresent() && data.get().exists() && data.get().isReadable()) {
             try ( BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(data.getInputStream())) ) {
+                    new InputStreamReader(data.get().getInputStream())) ) {
                 return reader.lines()
                         .skip(1)
                         .map(this::parseQuestion)
@@ -66,5 +73,16 @@ public class QuestionDaoImpl implements QuestionDao {
         answerVariant.setText(parts[1]);
         answerVariant.setCorrect("true".equals(parts[2]));
         return answerVariant;
+    }
+
+    private Optional<Resource> getLocalizedResource(String filePath, Locale locale) {
+        List<String> pathsToCheck = new ArrayList<>();
+        pathsToCheck.add(filePath.replace(FILE_EXTENSION, String.format("_%s_%s%s", locale.getLanguage(), locale.getCountry(), FILE_EXTENSION)));
+        pathsToCheck.add(filePath.replace(FILE_EXTENSION, String.format("_%s%s", locale.getLanguage(), FILE_EXTENSION)));
+        pathsToCheck.add(filePath);
+        return pathsToCheck.stream().map(path -> new ClassPathResource(path))
+                .map(classPathResource -> (Resource) classPathResource)
+                .filter(Resource::exists)
+                .findFirst();
     }
 }
