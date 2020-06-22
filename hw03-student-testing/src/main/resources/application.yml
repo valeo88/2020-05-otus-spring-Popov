@@ -1,6 +1,6 @@
 spring:
   messages:
-    basename: i18n.bundle_${application.locale}
+    basename: i18n/bundle
 
 application:
   locale: ru_RU
