@@ -1,0 +1,13 @@
+spring:
+  messages:
+    basename: i18n/bundle
+
+application:
+  locale: ru_RU
+
+questions:
+  filepath: questions.csv
+
+testing-settings:
+  questionsCount: 5
+  minCorrectAnswersForCredit: 2
