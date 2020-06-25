@@ -1,0 +1,6 @@
+number;type;text;answers
+1;choice;Whats your favorite color?;1,yellow,false|2,green,true
+2;input;Where are you from?;
+3;choice;Do you like Spring?;1,YES,false|2,YES of course,true
+4;input;Whats your name?;
+5;input;How old are you?;
