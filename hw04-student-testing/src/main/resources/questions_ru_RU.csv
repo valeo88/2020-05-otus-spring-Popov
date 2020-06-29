@@ -1,0 +1,6 @@
+number;type;text;answers
+1;choice;Какой ваш любимый цвет?;1,желтый,false|2,зеленый,true
+2;input;Откуда вы?;
+3;choice;Вы любите Spring?;1,ДА,false|2,ДА конечно,true
+4;input;Ваше имя?;
+5;input;Сколько вам лет?;
