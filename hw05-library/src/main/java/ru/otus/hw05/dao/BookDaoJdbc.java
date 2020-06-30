@@ -35,13 +35,20 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
+    public void update(Book book) {
+        namedParameterJdbcOperations.update(
+                "update book set name=:name, author_id=:author_id, genre_id=:genre_id where id=:id",
+                Map.of("id", book.getId(), "name", book.getName(), "author_id", book.getAuthor().getId(),
+                        "genre_id", book.getGenre().getId()));
+    }
+
+    @Override
     public Book getById(long id) {
         String query = "select b.*, a.name as author_name, a.surname as author_surname, g.name as genre_name " +
                 "from book b inner join author a on a.id = book.author_id " +
                 "inner join genre g on g.id = book.genre_id " +
                 "where b.id = :id";
-        return namedParameterJdbcOperations.queryForObject(query, Map.of("id", id),
-                new BookMapper());
+        return namedParameterJdbcOperations.queryForObject(query, Map.of("id", id), new BookMapper());
     }
 
     @Override
