@@ -1,6 +1,6 @@
-insert into AUTHOR(ID, NAME, SURNAME) values (1, 'Richard', 'Bergman');
-insert into AUTHOR(ID, NAME, SURNAME) values (2, 'Ivan', 'Ivanov');
-insert into AUTHOR(ID, NAME, SURNAME) values (3, 'John', 'Snow');
+insert into AUTHOR(ID, FULL_NAME) values (1, 'Richard Bergman');
+insert into AUTHOR(ID, FULL_NAME) values (2, 'Ivan Ivanov');
+insert into AUTHOR(ID, FULL_NAME) values (3, 'John Snow');
 
 insert into GENRE(ID, NAME) values (1, 'Mystic');
 insert into GENRE(ID, NAME) values (2, 'Fantasy');

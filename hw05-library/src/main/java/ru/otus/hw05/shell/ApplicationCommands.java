@@ -22,7 +22,7 @@ public class ApplicationCommands {
 
     @ShellMethod(key = "create-book", value = "Create new book")
     public void createBook(@ShellOption({"--id"}) long id, @ShellOption({"--name"}) String name) {
-        Author author = new Author(1,"","");
+        Author author = new Author(1,"");
         Genre genre = new Genre(1,"");
         Book book = new Book(id,name,author,genre);
         bookService.save(book);
