@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface BookService {
     List<Book> getAll();
 
-    Optional<Book> getById(long id);
+    Optional<Book> find(long id);
 
     void save(Book book);
 

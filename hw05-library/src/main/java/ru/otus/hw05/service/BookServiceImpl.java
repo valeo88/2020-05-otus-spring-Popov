@@ -22,13 +22,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getById(long id) {
+    public Optional<Book> find(long id) {
         return Optional.ofNullable(bookDao.getById(id));
     }
 
     @Override
     public void save(Book book) {
-        getById(book.getId()).ifPresentOrElse(bookDao::update, () -> bookDao.insert(book));
+        find(book.getId()).ifPresentOrElse(bookDao::update, () -> bookDao.insert(book));
     }
 
     @Override
