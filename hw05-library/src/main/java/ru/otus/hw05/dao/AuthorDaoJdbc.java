@@ -20,19 +20,6 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public void insert(Author author) {
-        namedParameterJdbcOperations.update(
-                "insert into author (id,full_name) values (:id,:full_name)",
-                Map.of("id", author.getId(), "full_name", author.getFullName()));
-    }
-
-    @Override
-    public Author getByFullName(String fullName) {
-        return namedParameterJdbcOperations.queryForObject("select * from author a where a.full_name = :full_name",
-                Map.of("full_name", fullName), new AuthorMapper());
-    }
-
-    @Override
     public List<Author> getAll() {
         return namedParameterJdbcOperations.query("select * from author a", Map.of(), new AuthorMapper());
     }

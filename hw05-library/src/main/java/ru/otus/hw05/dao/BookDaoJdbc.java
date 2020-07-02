@@ -1,7 +1,11 @@
 package ru.otus.hw05.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw05.model.Author;
 import ru.otus.hw05.model.Book;
@@ -27,12 +31,14 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void insert(Book book) {
-        book.setId(count() + 1);
+    public long insert(Book book) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcOperations.update(
-                "insert into book (id,name,author_id,genre_id) values (:id,:name,:author_id,:genre_id)",
-        Map.of("id", book.getId(), "name", book.getName(), "author_id", book.getAuthor().getId(),
-                "genre_id", book.getGenre().getId()));
+                "insert into book (name,author_id,genre_id) values (:name,:author_id,:genre_id)",
+        new MapSqlParameterSource(Map.of("name", book.getName(), "author_id", book.getAuthor().getId(),
+                "genre_id", book.getGenre().getId())), keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -45,11 +51,15 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book getById(long id) {
-        String query = "select b.*, a.full_name as author_full_name, g.name as genre_name " +
-                "from book b inner join author a on a.id = b.author_id " +
-                "inner join genre g on g.id = b.genre_id " +
-                "where b.id = :id";
-        return namedParameterJdbcOperations.queryForObject(query, Map.of("id", id), new BookMapper());
+        try {
+            String query = "select b.*, a.full_name as author_full_name, g.name as genre_name " +
+                    "from book b inner join author a on a.id = b.author_id " +
+                    "inner join genre g on g.id = b.genre_id " +
+                    "where b.id = :id";
+            return namedParameterJdbcOperations.queryForObject(query, Map.of("id", id), new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

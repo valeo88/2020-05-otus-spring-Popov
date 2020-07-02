@@ -20,19 +20,6 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void insert(Genre genre) {
-        namedParameterJdbcOperations.update(
-                "insert into genre (id,name) values (:id,:name)",
-                Map.of("id", genre.getId(), "name", genre.getName()));
-    }
-
-    @Override
-    public Genre getByName(String name) {
-        return namedParameterJdbcOperations.queryForObject("select * from genre g where g.name = :name",
-                Map.of("name", name), new GenreMapper());
-    }
-
-    @Override
     public List<Genre> getAll() {
         return namedParameterJdbcOperations.query("select * from genre g", Map.of(), new GenreMapper());
     }
