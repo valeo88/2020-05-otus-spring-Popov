@@ -11,6 +11,7 @@ import ru.otus.hw05.service.BookService;
 import ru.otus.hw05.service.GenreService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ShellComponent
@@ -48,7 +49,7 @@ public class ApplicationCommands {
         Genre genre = new Genre(genreId, null);
         Author author = new Author(authorId, null);
         Book book = bookService.save(new Book(0, name,author,genre));
-        return book.toString();
+        return "Created " + book.toString();
     }
 
     @ShellMethod(key = "update-book", value = "Update existed book")
@@ -58,7 +59,19 @@ public class ApplicationCommands {
             Genre genre = new Genre(genreId, null);
             Author author = new Author(authorId, null);
             Book book = bookService.save(new Book(id, name,author,genre));
-            return book.toString();
+            return "Updated " + book.toString();
+        } else {
+            return String.format("Book with id=%d not found", id);
+        }
+    }
+
+    @ShellMethod(key = "remove-book", value = "Remove existed book")
+    public String removeBook(@ShellOption({"--id"}) long id) {
+        Optional<Book> bookOptional = bookService.find(id);
+        if (bookOptional.isPresent()) {
+            Book book = bookOptional.get();
+            bookService.delete(book);
+            return "Removed " + book.toString();
         } else {
             return String.format("Book with id=%d not found", id);
         }
