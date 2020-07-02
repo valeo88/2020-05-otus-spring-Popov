@@ -28,6 +28,7 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public void insert(Book book) {
+        book.setId(count() + 1);
         namedParameterJdbcOperations.update(
                 "insert into book (id,name,author_id,genre_id) values (:id,:name,:author_id,:genre_id)",
         Map.of("id", book.getId(), "name", book.getName(), "author_id", book.getAuthor().getId(),

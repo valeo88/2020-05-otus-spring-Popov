@@ -21,16 +21,18 @@ public class ApplicationCommands {
     }
 
     @ShellMethod(key = "create-book", value = "Create new book")
-    public void createBook(@ShellOption({"--id"}) long id, @ShellOption({"--name"}) String name) {
-        Author author = new Author(1,"");
-        Genre genre = new Genre(1,"");
-        Book book = new Book(id,name,author,genre);
+    public String createBook(@ShellOption({"--name"}) String name,  @ShellOption({"--author"}) String authorName,
+                           @ShellOption({"--genre"}) String genreName) {
+        Genre genre = new Genre(genreName);
+        Author author = new Author(authorName);
+        Book book = new Book(name,author,genre);
         bookService.save(book);
+        return book.toString();
     }
 
     @ShellMethod(key = "list-books", value = "List all books")
     public String listBooks() {
         List<Book> bookList = bookService.getAll();
-        return bookList.stream().map(book -> book.toString()).collect(Collectors.joining("\n"));
+        return bookList.stream().map(Book::toString).collect(Collectors.joining("\n"));
     }
 }
