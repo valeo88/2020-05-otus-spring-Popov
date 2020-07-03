@@ -48,7 +48,7 @@ public class ApplicationCommands {
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
         Genre genre = new Genre(genreId, null);
         Author author = new Author(authorId, null);
-        Book book = bookService.save(new Book(0, name,author,genre));
+        Book book = bookService.save(new Book(name,author,genre));
         return "Created " + book.toString();
     }
 
