@@ -25,7 +25,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> find(long id) {
-        return Optional.ofNullable(bookDao.getById(id));
+        return bookDao.getById(id);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
         } catch (Exception e) {
             throw new BookSaveException("Something wrong in saving book: " + e.getMessage());
         }
-        return bookDao.getById(id);
+        return bookDao.getById(id).get();
     }
 
     @Override

@@ -63,10 +63,10 @@ public class BookDaoJdbcTest {
         bookDao.update(book);
 
         val updated = bookDao.getById(book.getId());
-        assertThat(updated).isNotNull()
-                .matches(b -> b.getId() == 1)
-                .matches(b -> b.getAuthor().getId() == 1)
-                .matches(b -> b.getGenre().getId() == 1);
+        assertThat(updated).isNotEmpty()
+                .matches(b -> b.get().getId() == 1)
+                .matches(b -> b.get().getAuthor().getId() == 1)
+                .matches(b -> b.get().getGenre().getId() == 1);
     }
 
     @DisplayName("должен выдавать книгу по существующему идентификатору")
@@ -74,27 +74,27 @@ public class BookDaoJdbcTest {
     void shouldReturnBookWhenIdExists() {
         val book = bookDao.getById(1);
 
-        assertThat(book).isNotNull()
-                .matches(b -> b.getId() == 1)
-                .matches(b -> b.getAuthor().getId() == 2)
-                .matches(b -> b.getGenre().getId() == 1);
+        assertThat(book).isNotEmpty()
+                .matches(b -> b.get().getId() == 1)
+                .matches(b -> b.get().getAuthor().getId() == 2)
+                .matches(b -> b.get().getGenre().getId() == 1);
     }
 
-    @DisplayName("должен выдавать null по несуществующему идентификатору")
+    @DisplayName("должен выдавать Empty по несуществующему идентификатору")
     @Test
-    void shouldReturnNullWhenIdNotExists() {
+    void shouldReturnEmptyWhenIdNotExists() {
         val book = bookDao.getById(-1);
 
-        assertThat(book).isNull();
+        assertThat(book).isEmpty();
     }
 
-    @DisplayName("должен выдавать null по несуществующему идентификатору")
+    @DisplayName("должен удалять книгу по существующему идентификатору")
     @Test
     void shouldDeleteBookWhenIdExists() {
         val id = 1;
 
         bookDao.deleteById(id);
 
-        assertThat(bookDao.getById(id)).isNull();
+        assertThat(bookDao.getById(id)).isEmpty();
     }
 }

@@ -11,7 +11,6 @@ import ru.otus.hw05.service.BookService;
 import ru.otus.hw05.service.GenreService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ShellComponent
@@ -55,25 +54,21 @@ public class ApplicationCommands {
     @ShellMethod(key = "update-book", value = "Update existed book")
     public String updateBook(@ShellOption({"--id"}) long id, @ShellOption({"--name"}) String name,
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
-        if (bookService.find(id).isPresent()) {
-            Genre genre = new Genre(genreId, null);
-            Author author = new Author(authorId, null);
-            Book book = bookService.save(new Book(id, name,author,genre));
-            return "Updated " + book.toString();
-        } else {
-            return String.format("Book with id=%d not found", id);
-        }
+        return bookService.find(id)
+                .map(b -> new Book(id, name, new Author(authorId, null),new Genre(genreId, null)))
+                .map(bookService::save)
+                .map(b -> "Updated " + b)
+                .orElse(String.format("Book with id=%d not found", id));
     }
 
     @ShellMethod(key = "remove-book", value = "Remove existed book")
     public String removeBook(@ShellOption({"--id"}) long id) {
-        Optional<Book> bookOptional = bookService.find(id);
-        if (bookOptional.isPresent()) {
-            Book book = bookOptional.get();
-            bookService.delete(book);
-            return "Removed " + book.toString();
-        } else {
-            return String.format("Book with id=%d not found", id);
-        }
+        return bookService.find(id)
+                .map(b -> {
+                    bookService.delete(b);
+                    return b;
+                })
+                .map(b -> "Removed " + b)
+                .orElse(String.format("Book with id=%d not found", id));
     }
 }

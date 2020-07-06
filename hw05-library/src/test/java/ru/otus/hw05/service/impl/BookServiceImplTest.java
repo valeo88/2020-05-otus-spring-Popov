@@ -13,6 +13,7 @@ import ru.otus.hw05.service.BookService;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -27,6 +28,12 @@ class BookServiceImplTest {
     void setUp() throws IOException {
         when(bookDao.getAll()).thenReturn(
                 sampleBooks()
+        );
+        when(bookDao.insert(any())).thenReturn(
+                1L
+        );
+        when(bookDao.getById(1L)).thenReturn(
+                Optional.of(sampleBooks().get(0))
         );
 
         bookService = new BookServiceImpl(bookDao);

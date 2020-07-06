@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class BookDaoJdbc implements BookDao {
@@ -50,15 +51,15 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public Book getById(long id) {
+    public Optional<Book> getById(long id) {
         try {
             String query = "select b.*, a.full_name as author_full_name, g.name as genre_name " +
                     "from book b inner join author a on a.id = b.author_id " +
                     "inner join genre g on g.id = b.genre_id " +
                     "where b.id = :id";
-            return namedParameterJdbcOperations.queryForObject(query, Map.of("id", id), new BookMapper());
+            return Optional.of(namedParameterJdbcOperations.queryForObject(query, Map.of("id", id), new BookMapper()));
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

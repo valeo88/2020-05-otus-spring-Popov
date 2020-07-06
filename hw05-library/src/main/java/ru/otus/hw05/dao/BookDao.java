@@ -3,6 +3,7 @@ package ru.otus.hw05.dao;
 import ru.otus.hw05.model.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookDao {
     int count();
@@ -11,7 +12,7 @@ public interface BookDao {
 
     void update(Book book);
 
-    Book getById(long id);
+    Optional<Book> getById(long id);
 
     List<Book> getAll();
 
