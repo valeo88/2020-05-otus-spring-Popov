@@ -6,6 +6,7 @@ import ru.otus.hw06.model.Book;
 import ru.otus.hw06.service.BookSaveException;
 import ru.otus.hw06.service.BookService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,16 +19,19 @@ public class BookServiceImpl implements BookService {
         this.bookDao = bookDao;
     }
 
+    @Transactional
     @Override
     public List<Book> getAll() {
         return bookDao.getAll();
     }
 
+    @Transactional
     @Override
     public Optional<Book> find(long id) {
         return bookDao.getById(id);
     }
 
+    @Transactional
     @Override
     public Book save(Book book) {
         long id = book.getId();
@@ -43,6 +47,7 @@ public class BookServiceImpl implements BookService {
         return bookDao.getById(id).get();
     }
 
+    @Transactional
     @Override
     public void delete(Book book) {
         bookDao.deleteById(book.getId());
