@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -35,7 +36,8 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public Optional<Book> getById(long id) {
-        return Optional.ofNullable(em.find(Book.class, id));
+        return Optional.ofNullable(em.find(Book.class, id,
+                Map.of("javax.persistence.fetchgraph", em.getEntityGraph("book-with-all-links"))));
     }
 
     @Override
