@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw06.dao.BookDao;
 import ru.otus.hw06.model.Book;
+import ru.otus.hw06.model.Comment;
+import ru.otus.hw06.service.BookNotFoundException;
 import ru.otus.hw06.service.BookSaveException;
 import ru.otus.hw06.service.BookService;
 
@@ -51,5 +53,28 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(Book book) {
         bookDao.deleteById(book.getId());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Comment> getComments(Book book) {
+        Book reloaded = find(book.getId()).orElseThrow(BookNotFoundException::new);
+        return reloaded.getComments();
+    }
+
+    @Transactional
+    @Override
+    public Comment addComment(Book book, String text) {
+        Book reloaded = bookDao.getById(book.getId())
+                .orElseThrow(BookNotFoundException::new);
+
+        Comment comment = new Comment();
+        comment.setValue(text);
+        comment.setBook(reloaded);
+
+        reloaded.getComments().add(comment);
+        bookDao.update(reloaded);
+
+        return comment;
     }
 }

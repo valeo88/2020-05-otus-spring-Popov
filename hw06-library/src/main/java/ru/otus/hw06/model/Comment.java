@@ -18,4 +18,8 @@ public class Comment {
 
     @Column(name = "value", nullable = false)
     private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "book_id")
+    private Book book;
 }
