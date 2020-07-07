@@ -25,6 +25,7 @@
         <module>hw03-student-testing</module>
         <module>hw04-student-testing</module>
         <module>hw05-library</module>
+        <module>hw06-library</module>
     </modules>
 
     <properties>
