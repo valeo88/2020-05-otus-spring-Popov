@@ -1,12 +1,12 @@
 package ru.otus.hw06.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw06.dao.BookDao;
 import ru.otus.hw06.model.Book;
 import ru.otus.hw06.service.BookSaveException;
 import ru.otus.hw06.service.BookService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +19,13 @@ public class BookServiceImpl implements BookService {
         this.bookDao = bookDao;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
         return bookDao.getAll();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Book> find(long id) {
         return bookDao.getById(id);

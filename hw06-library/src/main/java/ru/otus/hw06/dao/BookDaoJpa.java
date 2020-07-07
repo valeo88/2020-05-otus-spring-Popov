@@ -3,6 +3,7 @@ package ru.otus.hw06.dao;
 import org.springframework.stereotype.Repository;
 import ru.otus.hw06.model.Book;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -39,7 +40,11 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public List<Book> getAll() {
+        EntityGraph<?> entityGraph = em.getEntityGraph("book-with-all-links");
+
         TypedQuery<Book> query = em.createQuery("select e from Book e", Book.class);
+        query.setHint("javax.persistence.fetchgraph", entityGraph);
+
         return query.getResultList();
     }
 

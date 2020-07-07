@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@NamedEntityGraph(name = "book-with-all-links", includeAllAttributes = true)
 @Table(name = "book")
 @Entity
 @Data
