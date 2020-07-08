@@ -1,4 +1,4 @@
-package ru.otus.hw06.dao;
+package ru.otus.hw06.repository;
 import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,27 +11,27 @@ import ru.otus.hw06.model.Genre;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("DAO на основе JPA для работы с книгами ")
+@DisplayName("Репозиторий на основе JPA для работы с книгами ")
 @DataJpaTest
-@Import({BookDaoJpa.class})
-public class BookDaoJpaTest {
+@Import({BookRepositoryJpa.class})
+public class BookRepositoryJpaTest {
 
     private static final int EXPECTED_NUMBER_OF_BOOKS = 4;
 
     @Autowired
-    private BookDaoJpa bookDao;
+    private BookRepositoryJpa bookRepository;
 
     @DisplayName("должен выдавать корректное количество книг")
     @Test
     void shouldReturnCorrectCountOfAllBooks() {
-        val count = bookDao.count();
+        val count = bookRepository.count();
         assertThat(count).isEqualTo(EXPECTED_NUMBER_OF_BOOKS);
     }
 
     @DisplayName("должен загружать список всех книг с полной информацией о них")
     @Test
     void shouldReturnCorrectGenresListWithAllInfo() {
-        val books = bookDao.getAll();
+        val books = bookRepository.getAll();
         assertThat(books).isNotNull().hasSize(EXPECTED_NUMBER_OF_BOOKS)
                 .allMatch(b -> !b.getName().equals(""))
                 .allMatch(b -> b.getAuthor()!=null)
@@ -44,7 +44,7 @@ public class BookDaoJpaTest {
     void shouldReturnCorrectBookIdWhenInsertedNew() {
         val book = new Book(0, "Test", new Author(1,null), new Genre(1,null));
 
-        val bookId = bookDao.insert(book);
+        val bookId = bookRepository.insert(book);
         assertThat(bookId).isGreaterThan(0);
     }
 
@@ -53,9 +53,9 @@ public class BookDaoJpaTest {
     void shouldCorrectUpdateBook() {
         val book = new Book(1,"Test", new Author(1,null), new Genre(1,null));
 
-        bookDao.update(book);
+        bookRepository.update(book);
 
-        val updated = bookDao.getById(book.getId());
+        val updated = bookRepository.getById(book.getId());
         assertThat(updated).isNotEmpty()
                 .matches(b -> b.get().getId() == 1)
                 .matches(b -> b.get().getAuthor().getId() == 1)
@@ -65,7 +65,7 @@ public class BookDaoJpaTest {
     @DisplayName("должен выдавать книгу по существующему идентификатору")
     @Test
     void shouldReturnBookWhenIdExists() {
-        val book = bookDao.getById(1);
+        val book = bookRepository.getById(1);
 
         assertThat(book).isNotEmpty()
                 .matches(b -> b.get().getId() == 1)
@@ -76,7 +76,7 @@ public class BookDaoJpaTest {
     @DisplayName("должен выдавать Empty по несуществующему идентификатору")
     @Test
     void shouldReturnEmptyWhenIdNotExists() {
-        val book = bookDao.getById(-1);
+        val book = bookRepository.getById(-1);
 
         assertThat(book).isEmpty();
     }
@@ -86,8 +86,8 @@ public class BookDaoJpaTest {
     void shouldDeleteBookWhenIdExists() {
         val id = 1;
 
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
 
-        assertThat(bookDao.getById(id)).isEmpty();
+        assertThat(bookRepository.getById(id)).isEmpty();
     }
 }

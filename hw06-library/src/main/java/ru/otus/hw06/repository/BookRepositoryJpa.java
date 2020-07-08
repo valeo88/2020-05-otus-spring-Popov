@@ -1,4 +1,4 @@
-package ru.otus.hw06.dao;
+package ru.otus.hw06.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.otus.hw06.model.Book;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class BookDaoJpa implements BookDao {
+public class BookRepositoryJpa implements BookRepository {
 
     @PersistenceContext
     private EntityManager em;

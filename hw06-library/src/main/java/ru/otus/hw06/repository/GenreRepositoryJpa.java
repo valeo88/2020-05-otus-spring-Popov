@@ -1,4 +1,4 @@
-package ru.otus.hw06.dao;
+package ru.otus.hw06.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.otus.hw06.model.Genre;
@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class GenreDaoJpa implements GenreDao {
+public class GenreRepositoryJpa implements GenreRepository {
 
     @PersistenceContext
     private EntityManager em;

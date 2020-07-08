@@ -1,9 +1,9 @@
-package ru.otus.hw06.dao;
+package ru.otus.hw06.repository;
 
 import ru.otus.hw06.model.Genre;
 
 import java.util.List;
 
-public interface GenreDao {
+public interface GenreRepository {
     List<Genre> getAll();
 }

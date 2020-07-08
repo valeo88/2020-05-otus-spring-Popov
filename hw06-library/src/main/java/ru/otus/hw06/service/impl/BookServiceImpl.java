@@ -2,9 +2,9 @@ package ru.otus.hw06.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw06.dao.BookDao;
 import ru.otus.hw06.model.Book;
 import ru.otus.hw06.model.Comment;
+import ru.otus.hw06.repository.BookRepository;
 import ru.otus.hw06.service.BookNotFoundException;
 import ru.otus.hw06.service.BookSaveException;
 import ru.otus.hw06.service.BookService;
@@ -15,22 +15,22 @@ import java.util.Optional;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
 
-    public BookServiceImpl(BookDao bookDao) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
-        return bookDao.getAll();
+        return bookRepository.getAll();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<Book> find(long id) {
-        return bookDao.getById(id);
+        return bookRepository.getById(id);
     }
 
     @Transactional
@@ -39,20 +39,20 @@ public class BookServiceImpl implements BookService {
         long id = book.getId();
         try {
             if (book.getId() == 0) {
-                id = bookDao.insert(book);
+                id = bookRepository.insert(book);
             } else {
-                bookDao.update(book);
+                bookRepository.update(book);
             }
         } catch (Exception e) {
             throw new BookSaveException("Something wrong in saving book: " + e.getMessage());
         }
-        return bookDao.getById(id).get();
+        return bookRepository.getById(id).get();
     }
 
     @Transactional
     @Override
     public void delete(Book book) {
-        bookDao.deleteById(book.getId());
+        bookRepository.deleteById(book.getId());
     }
 
     @Transactional(readOnly = true)
@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Comment addComment(Book book, String text) {
-        Book reloaded = bookDao.getById(book.getId())
+        Book reloaded = bookRepository.getById(book.getId())
                 .orElseThrow(BookNotFoundException::new);
 
         Comment comment = new Comment();
@@ -73,7 +73,7 @@ public class BookServiceImpl implements BookService {
         comment.setBook(reloaded);
 
         reloaded.getComments().add(comment);
-        bookDao.update(reloaded);
+        bookRepository.update(reloaded);
 
         return comment;
     }
