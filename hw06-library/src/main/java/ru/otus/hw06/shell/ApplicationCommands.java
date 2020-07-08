@@ -71,4 +71,12 @@ public class ApplicationCommands {
                 .map(b -> "Removed " + b)
                 .orElse(String.format("Book with id=%d not found", id));
     }
+
+    @ShellMethod(key = "add-comment", value = "Add comment to book")
+    public String addComment(@ShellOption({"--book-id"}) long bookId, @ShellOption({"--comment"}) String comment) {
+        return bookService.find(bookId)
+                .map(b -> bookService.addComment(b, comment))
+                .map(c -> String.format("Added comment %s for book %s",c.getValue(), c.getBook()))
+                .orElse(String.format("Book with id=%d not found", bookId));
+    }
 }
