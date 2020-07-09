@@ -44,8 +44,8 @@ public class BookRepositoryJpaTest {
     void shouldReturnCorrectBookIdWhenInsertedNew() {
         val book = new Book(0, "Test", new Author(1,null), new Genre(1,null));
 
-        val bookId = bookRepository.insert(book);
-        assertThat(bookId).isGreaterThan(0);
+        val saved = bookRepository.save(book);
+        assertThat(saved).isNotNull().matches(b -> b.getId() > 0);
     }
 
     @DisplayName("должен изменить книгу при обновлении")
@@ -53,13 +53,12 @@ public class BookRepositoryJpaTest {
     void shouldCorrectUpdateBook() {
         val book = new Book(1,"Test", new Author(1,null), new Genre(1,null));
 
-        bookRepository.update(book);
+        val updated = bookRepository.save(book);
 
-        val updated = bookRepository.getById(book.getId());
-        assertThat(updated).isNotEmpty()
-                .matches(b -> b.get().getId() == 1)
-                .matches(b -> b.get().getAuthor().getId() == 1)
-                .matches(b -> b.get().getGenre().getId() == 1);
+        assertThat(updated).isNotNull()
+                .matches(b -> b.getId() == 1)
+                .matches(b -> b.getAuthor().getId() == 1)
+                .matches(b -> b.getGenre().getId() == 1);
     }
 
     @DisplayName("должен выдавать книгу по существующему идентификатору")

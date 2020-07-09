@@ -8,9 +8,7 @@ import java.util.Optional;
 public interface BookRepository {
     int count();
 
-    long insert(Book book);
-
-    void update(Book book);
+    Book save(Book book);
 
     Optional<Book> getById(long id);
 

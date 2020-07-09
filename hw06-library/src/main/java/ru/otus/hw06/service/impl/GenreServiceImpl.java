@@ -1,6 +1,7 @@
 package ru.otus.hw06.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw06.model.Genre;
 import ru.otus.hw06.repository.GenreRepository;
 import ru.otus.hw06.service.GenreService;
@@ -16,6 +17,7 @@ public class GenreServiceImpl implements GenreService {
         this.genreRepository = genreRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Genre> getAll() {
         return genreRepository.getAll();

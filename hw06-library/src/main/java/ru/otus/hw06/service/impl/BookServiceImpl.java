@@ -36,17 +36,11 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Book save(Book book) {
-        long id = book.getId();
         try {
-            if (book.getId() == 0) {
-                id = bookRepository.insert(book);
-            } else {
-                bookRepository.update(book);
-            }
+            return bookRepository.save(book);
         } catch (Exception e) {
-            throw new BookSaveException("Something wrong in saving book: " + e.getMessage());
+            throw new BookSaveException(String.format("Error on save book: %s, %s", book, e.getMessage()));
         }
-        return bookRepository.getById(id).get();
     }
 
     @Transactional
@@ -73,7 +67,7 @@ public class BookServiceImpl implements BookService {
         comment.setBook(reloaded);
 
         reloaded.getComments().add(comment);
-        bookRepository.update(reloaded);
+        bookRepository.save(reloaded);
 
         return comment;
     }
