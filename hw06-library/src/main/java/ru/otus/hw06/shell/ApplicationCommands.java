@@ -10,7 +10,6 @@ import ru.otus.hw06.service.AuthorService;
 import ru.otus.hw06.service.BookService;
 import ru.otus.hw06.service.GenreService;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @ShellComponent
@@ -38,8 +37,7 @@ public class ApplicationCommands {
 
     @ShellMethod(key = "list-books", value = "List all books")
     public String listBooks() {
-        List<Book> bookList = bookService.getAll();
-        return bookList.stream().map(Book::toString).collect(Collectors.joining("\n"));
+        return bookService.getAll().stream().map(this::getBookInfo).collect(Collectors.joining("\n"));
     }
 
     @ShellMethod(key = "create-book", value = "Create new book")
@@ -48,7 +46,7 @@ public class ApplicationCommands {
         Genre genre = new Genre(genreId, null);
         Author author = new Author(authorId, null);
         Book book = bookService.save(new Book(0,name,author,genre));
-        return "Created " + book.toString();
+        return "Created " + getBookInfo(book);
     }
 
     @ShellMethod(key = "update-book", value = "Update existed book")
@@ -57,7 +55,7 @@ public class ApplicationCommands {
         return bookService.find(id)
                 .map(b -> new Book(id, name, new Author(authorId, null),new Genre(genreId, null)))
                 .map(bookService::save)
-                .map(b -> "Updated " + b)
+                .map(b -> "Updated " + getBookInfo(b))
                 .orElse(String.format("Book with id=%d not found", id));
     }
 
@@ -68,7 +66,7 @@ public class ApplicationCommands {
                     bookService.delete(b);
                     return b;
                 })
-                .map(b -> "Removed " + b)
+                .map(b -> "Removed " + getBookInfo(b))
                 .orElse(String.format("Book with id=%d not found", id));
     }
 
@@ -76,7 +74,12 @@ public class ApplicationCommands {
     public String addComment(@ShellOption({"--book-id"}) long bookId, @ShellOption({"--comment"}) String comment) {
         return bookService.find(bookId)
                 .map(b -> bookService.addComment(b, comment))
-                .map(c -> String.format("Added comment %s for book %s",c.getValue(), c.getBook()))
+                .map(c -> String.format("Added comment '%s' for book '%s'",c.getValue(), c.getBook().getName()))
                 .orElse(String.format("Book with id=%d not found", bookId));
+    }
+
+    private String getBookInfo(Book book) {
+        return String.format("Book (id=%d) '%s' by %s of %s", book.getId(), book.getName(),
+                book.getAuthor().getFullName(), book.getGenre().getName());
     }
 }

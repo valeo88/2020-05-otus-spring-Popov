@@ -29,19 +29,23 @@ public class BookRepositoryJpa implements BookRepository {
             em.persist(book);
             return book;
         } else {
-            return em.merge(book);
+            Book reloaded = em.find(Book.class, book.getId());
+            reloaded.setName(book.getName());
+            reloaded.setAuthor(book.getAuthor());
+            reloaded.setGenre(book.getGenre());
+            return em.merge(reloaded);
         }
     }
 
     @Override
     public Optional<Book> getById(long id) {
         return Optional.ofNullable(em.find(Book.class, id,
-                Map.of("javax.persistence.fetchgraph", em.getEntityGraph("book-with-all-links"))));
+                Map.of("javax.persistence.fetchgraph", em.getEntityGraph("book-with-author-and-genre"))));
     }
 
     @Override
     public List<Book> getAll() {
-        EntityGraph<?> entityGraph = em.getEntityGraph("book-with-all-links");
+        EntityGraph<?> entityGraph = em.getEntityGraph("book-with-author-and-genre");
 
         TypedQuery<Book> query = em.createQuery("select e from Book e", Book.class);
         query.setHint("javax.persistence.fetchgraph", entityGraph);

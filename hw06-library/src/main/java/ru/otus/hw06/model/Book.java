@@ -1,19 +1,22 @@
 package ru.otus.hw06.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
-@NamedEntityGraph(name = "book-with-all-links", includeAllAttributes = true)
-@Table(name = "book")
-@Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(name = "book-with-author-and-genre", attributeNodes = {
+        @NamedAttributeNode("author"), @NamedAttributeNode("genre")
+})
+@Table(name = "book")
+@Entity
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,22 +35,12 @@ public class Book {
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments;
 
     public Book(long id, String name, Author author, Genre genre) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.genre = genre;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", author=" + author +
-                ", genre=" + genre +
-                '}';
     }
 }
