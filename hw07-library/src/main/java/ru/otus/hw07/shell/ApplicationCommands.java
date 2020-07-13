@@ -3,6 +3,7 @@ package ru.otus.hw07.shell;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.hw07.dto.BookDto;
 import ru.otus.hw07.model.Author;
 import ru.otus.hw07.model.Book;
 import ru.otus.hw07.model.Genre;
@@ -43,9 +44,8 @@ public class ApplicationCommands {
     @ShellMethod(key = "create-book", value = "Create new book")
     public String createBook(@ShellOption({"--name"}) String name,
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
-        Genre genre = new Genre(genreId, null);
-        Author author = new Author(authorId, null);
-        Book book = bookService.save(new Book(0,name,author,genre));
+        BookDto book = bookService.save(new Book(name, new Author(authorId, null),
+                new Genre(genreId, null)));
         return "Created " + getBookInfo(book);
     }
 
@@ -53,7 +53,13 @@ public class ApplicationCommands {
     public String updateBook(@ShellOption({"--id"}) long id, @ShellOption({"--name"}) String name,
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
         return bookService.find(id)
-                .map(b -> new Book(id, name, new Author(authorId, null),new Genre(genreId, null)))
+                .map(b -> {
+                    Book book = b.toBook();
+                    book.setName(name);
+                    book.setAuthor(new Author(authorId, null));
+                    book.setGenre(new Genre(genreId, null));
+                    return book;
+                })
                 .map(bookService::save)
                 .map(b -> "Updated " + getBookInfo(b))
                 .orElse(String.format("Book with id=%d not found", id));
@@ -63,7 +69,7 @@ public class ApplicationCommands {
     public String removeBook(@ShellOption({"--id"}) long id) {
         return bookService.find(id)
                 .map(b -> {
-                    bookService.delete(b);
+                    bookService.delete(b.toBook());
                     return b;
                 })
                 .map(b -> "Removed " + getBookInfo(b))
@@ -73,13 +79,13 @@ public class ApplicationCommands {
     @ShellMethod(key = "add-comment", value = "Add comment to book")
     public String addComment(@ShellOption({"--book-id"}) long bookId, @ShellOption({"--comment"}) String comment) {
         return bookService.find(bookId)
-                .map(b -> bookService.addComment(b, comment))
-                .map(c -> String.format("Added comment '%s' for book '%s'",c.getValue(), c.getBook().getName()))
+                .map(b -> bookService.addComment(b.toBook(), comment))
+                .map(c -> String.format("Added comment '%s' for book '%s'",c.getCommentValue(), c.getBookTitle()))
                 .orElse(String.format("Book with id=%d not found", bookId));
     }
 
-    private String getBookInfo(Book book) {
-        return String.format("Book (id=%d) '%s' by %s of %s", book.getId(), book.getName(),
-                book.getAuthor().getFullName(), book.getGenre().getName());
+    private String getBookInfo(BookDto bookDto) {
+        return String.format("Book (id=%d) '%s' by %s of %s", bookDto.getId(), bookDto.getTitle(),
+                bookDto.getAuthorName(), bookDto.getGenreName());
     }
 }

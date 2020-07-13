@@ -1,6 +1,5 @@
 package ru.otus.hw07.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "book")
 @Entity
@@ -30,12 +28,18 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private List<Comment> comments;
 
     public Book(long id, String name, Author author, Genre genre) {
         this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public Book(String name, Author author, Genre genre) {
         this.name = name;
         this.author = author;
         this.genre = genre;

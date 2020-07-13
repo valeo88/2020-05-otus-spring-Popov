@@ -1,21 +1,22 @@
 package ru.otus.hw07.service;
 
+import ru.otus.hw07.dto.BookDto;
+import ru.otus.hw07.dto.CommentDto;
 import ru.otus.hw07.model.Book;
-import ru.otus.hw07.model.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    List<Book> getAll();
+    List<BookDto> getAll();
 
-    Optional<Book> find(long id);
+    Optional<BookDto> find(long id);
 
-    Book save(Book book);
+    BookDto save(Book book);
 
     void delete(Book book);
 
-    List<Comment> getComments(Book book);
+    List<CommentDto> getComments(Book book);
 
-    Comment addComment(Book book, String text);
+    CommentDto addComment(Book book, String text);
 }
