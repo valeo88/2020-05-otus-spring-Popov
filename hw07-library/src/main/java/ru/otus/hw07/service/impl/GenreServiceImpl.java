@@ -7,6 +7,7 @@ import ru.otus.hw07.repository.GenreRepository;
 import ru.otus.hw07.service.GenreService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -15,6 +16,11 @@ public class GenreServiceImpl implements GenreService {
 
     public GenreServiceImpl(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
+    }
+
+    @Override
+    public Optional<Genre> getById(long id) {
+        return genreRepository.findById(id);
     }
 
     @Transactional(readOnly = true)

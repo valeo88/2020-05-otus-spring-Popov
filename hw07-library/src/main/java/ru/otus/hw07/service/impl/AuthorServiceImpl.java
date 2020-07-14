@@ -7,6 +7,7 @@ import ru.otus.hw07.repository.AuthorRepository;
 import ru.otus.hw07.service.AuthorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -15,6 +16,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     public AuthorServiceImpl(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
+    }
+
+    @Override
+    public Optional<Author> getById(long id) {
+        return authorRepository.findById(id);
     }
 
     @Transactional(readOnly = true)

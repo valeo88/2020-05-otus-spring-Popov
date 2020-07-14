@@ -11,6 +11,7 @@ import ru.otus.hw07.service.AuthorService;
 import ru.otus.hw07.service.BookService;
 import ru.otus.hw07.service.GenreService;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ShellComponent
@@ -44,20 +45,31 @@ public class ApplicationCommands {
     @ShellMethod(key = "create-book", value = "Create new book")
     public String createBook(@ShellOption({"--name"}) String name,
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
-        BookDto book = bookService.save(new Book(name, new Author(authorId, null),
-                new Genre(genreId, null)));
-        return "Created " + book;
+        Optional<Author> author = authorService.getById(authorId);
+        if (author.isEmpty()) return String.format("Author with id=%d not found", authorId);
+
+        Optional<Genre> genre = genreService.getById(genreId);
+        if (genre.isEmpty()) return String.format("Genre with id=%d not found", genreId);
+
+        BookDto bookDto = bookService.save(new Book(name, author.get(), genre.get()));
+        return "Created " + bookDto;
     }
 
     @ShellMethod(key = "update-book", value = "Update existed book")
     public String updateBook(@ShellOption({"--id"}) long id, @ShellOption({"--name"}) String name,
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
+        Optional<Author> author = authorService.getById(authorId);
+        if (author.isEmpty()) return String.format("Author with id=%d not found", authorId);
+
+        Optional<Genre> genre = genreService.getById(genreId);
+        if (genre.isEmpty()) return String.format("Genre with id=%d not found", genreId);
+
         return bookService.find(id)
                 .map(b -> {
                     Book book = b.toBook();
                     book.setName(name);
-                    book.setAuthor(new Author(authorId, null));
-                    book.setGenre(new Genre(genreId, null));
+                    book.setAuthor(author.get());
+                    book.setGenre(genre.get());
                     return book;
                 })
                 .map(bookService::save)
