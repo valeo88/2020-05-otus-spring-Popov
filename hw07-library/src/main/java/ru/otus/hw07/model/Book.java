@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,10 +26,6 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "genre_id")
     private Genre genre;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private List<Comment> comments;
 
     public Book(long id, String name, Author author, Genre genre) {
         this.id = id;

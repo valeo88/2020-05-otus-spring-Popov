@@ -32,4 +32,9 @@ public class BookDto {
                 .genreName(book.getGenre().getName())
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Book (id=%d) '%s' by %s of %s", id, title, authorName, genreName);
+    }
 }

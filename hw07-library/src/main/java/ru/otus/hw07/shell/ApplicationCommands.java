@@ -38,7 +38,7 @@ public class ApplicationCommands {
 
     @ShellMethod(key = "list-books", value = "List all books")
     public String listBooks() {
-        return bookService.getAll().stream().map(this::getBookInfo).collect(Collectors.joining("\n"));
+        return bookService.getAll().stream().map(BookDto::toString).collect(Collectors.joining("\n"));
     }
 
     @ShellMethod(key = "create-book", value = "Create new book")
@@ -46,7 +46,7 @@ public class ApplicationCommands {
                              @ShellOption({"--author-id"}) long authorId, @ShellOption({"--genre-id"}) long genreId) {
         BookDto book = bookService.save(new Book(name, new Author(authorId, null),
                 new Genre(genreId, null)));
-        return "Created " + getBookInfo(book);
+        return "Created " + book;
     }
 
     @ShellMethod(key = "update-book", value = "Update existed book")
@@ -61,7 +61,7 @@ public class ApplicationCommands {
                     return book;
                 })
                 .map(bookService::save)
-                .map(b -> "Updated " + getBookInfo(b))
+                .map(b -> "Updated " + b)
                 .orElse(String.format("Book with id=%d not found", id));
     }
 
@@ -72,7 +72,7 @@ public class ApplicationCommands {
                     bookService.delete(b.toBook());
                     return b;
                 })
-                .map(b -> "Removed " + getBookInfo(b))
+                .map(b -> "Removed " + b)
                 .orElse(String.format("Book with id=%d not found", id));
     }
 
@@ -82,10 +82,5 @@ public class ApplicationCommands {
                 .map(b -> bookService.addComment(b.toBook(), comment))
                 .map(c -> String.format("Added comment '%s' for book '%s'",c.getCommentValue(), c.getBookTitle()))
                 .orElse(String.format("Book with id=%d not found", bookId));
-    }
-
-    private String getBookInfo(BookDto bookDto) {
-        return String.format("Book (id=%d) '%s' by %s of %s", bookDto.getId(), bookDto.getTitle(),
-                bookDto.getAuthorName(), bookDto.getGenreName());
     }
 }
