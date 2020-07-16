@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.otus.hw07.model.Author;
 import ru.otus.hw07.model.Book;
 import ru.otus.hw07.model.Genre;
@@ -19,6 +20,8 @@ public class BookRepositoryTest {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @DisplayName("должен выдавать корректное количество книг")
     @Test
@@ -65,10 +68,10 @@ public class BookRepositoryTest {
     void shouldReturnBookWhenIdExists() {
         val book = bookRepository.findById(1L);
 
-        assertThat(book).isNotEmpty()
-                .matches(b -> b.get().getId() == 1)
-                .matches(b -> b.get().getAuthor().getId() == 2)
-                .matches(b -> b.get().getGenre().getId() == 1);
+        assertThat(book).isNotEmpty().get()
+                .matches(b -> b.getId() == 1)
+                .matches(b -> b.getAuthor().getId() == 2)
+                .matches(b -> b.getGenre().getId() == 1);
     }
 
     @DisplayName("должен выдавать Empty по несуществующему идентификатору")
@@ -86,6 +89,6 @@ public class BookRepositoryTest {
 
         bookRepository.deleteById(id);
 
-        assertThat(bookRepository.findById(id)).isEmpty();
+        assertThat(entityManager.find(Book.class, id)).isNull();
     }
 }

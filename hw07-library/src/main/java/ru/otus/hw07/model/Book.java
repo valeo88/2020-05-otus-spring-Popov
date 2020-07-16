@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+@NamedEntityGraph(name = "book-with-author-and-genre", attributeNodes = {
+        @NamedAttributeNode("author"), @NamedAttributeNode("genre")
+})
 @Getter
 @Setter
 @NoArgsConstructor
