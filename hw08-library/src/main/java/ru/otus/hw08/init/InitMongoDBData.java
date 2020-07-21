@@ -1,7 +1,5 @@
 package ru.otus.hw08.init;
 
-import lombok.AllArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import ru.otus.hw08.model.Author;
@@ -11,17 +9,16 @@ import ru.otus.hw08.model.Genre;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Component
-public class InitMongoDBData implements CommandLineRunner  {
+public class InitMongoDBData {
 
     private List<Genre> genres = new ArrayList<>();
     private List<Author> authors = new ArrayList<>();
 
     private final MongoTemplate template;
 
-    @Override
-    public void run(String... args) throws Exception {
+    public InitMongoDBData(MongoTemplate template) {
+        this.template = template;
         initGenres();
         initAuthors();
         initBooks();
