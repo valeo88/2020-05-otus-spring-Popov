@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       database: myDb
+      port: 0
 
 logging:
   level:
