@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      database: myDb
+
+logging:
+  level:
+    root: WARN
