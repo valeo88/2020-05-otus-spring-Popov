@@ -27,4 +27,9 @@ public class CommentDto {
                 .commentValue(comment.getValue())
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Comment (id=%s) '%s' for book '%s'", id, commentValue, bookTitle);
+    }
 }
