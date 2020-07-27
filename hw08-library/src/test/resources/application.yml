@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      database: test
+      port: 0
+
+  shell:
+    interactive:
+      enabled: false
+    script:
+      spring:
+        shell:
+          script: false
