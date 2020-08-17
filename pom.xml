@@ -28,6 +28,7 @@
         <module>hw06-library</module>
         <module>hw07-library</module>
         <module>hw08-library</module>
+        <module>hw09-library-web</module>
     </modules>
 
     <properties>
