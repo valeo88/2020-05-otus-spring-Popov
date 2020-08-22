@@ -32,28 +32,35 @@ public class BookController {
 
     @GetMapping("/create")
     public String createPage(Model model) {
-        model.addAttribute("book", new BookDto());
-        model.addAttribute("allAuthors", authorService.getAll());
-        model.addAttribute("allGenres", genreService.getAll());
+        prepareModel(model, new BookDto());
         return "bookEdit";
     }
 
     @GetMapping("/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         BookDto bookDto = bookService.find(id).orElseThrow(BookNotFoundException::new);
-        model.addAttribute("book", bookDto);
-        model.addAttribute("allAuthors", authorService.getAll());
-        model.addAttribute("allGenres", genreService.getAll());
+        prepareModel(model, bookDto);
         return "bookEdit";
     }
 
     @PostMapping("/edit")
     public String saveBook(BookDto bookDto, Model model) {
         BookDto saved = bookService.save(bookDto.toBook());
-        model.addAttribute("book", saved);
+        prepareModel(model, saved);
+        return "bookEdit";
+    }
+
+    @GetMapping("/delete")
+    public String deleteBook(@RequestParam("id") long id) {
+        BookDto bookDto = bookService.find(id).orElseThrow(BookNotFoundException::new);
+        bookService.delete(bookDto.toBook());
+        return "redirect:/";
+    }
+
+    private void prepareModel(Model model, BookDto bookDto) {
+        model.addAttribute("book", bookDto);
         model.addAttribute("allAuthors", authorService.getAll());
         model.addAttribute("allGenres", genreService.getAll());
-        return "bookEdit";
     }
 
 }
