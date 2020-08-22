@@ -30,6 +30,14 @@ public class BookController {
         return "bookList";
     }
 
+    @GetMapping("/create")
+    public String createPage(Model model) {
+        model.addAttribute("book", new BookDto());
+        model.addAttribute("allAuthors", authorService.getAll());
+        model.addAttribute("allGenres", genreService.getAll());
+        return "bookEdit";
+    }
+
     @GetMapping("/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
         BookDto bookDto = bookService.find(id).orElseThrow(BookNotFoundException::new);

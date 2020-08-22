@@ -18,6 +18,10 @@ public class BookDto {
     private long genreId;
     private String genreName;
 
+    public BookDto() {
+
+    }
+
     public Book toBook() {
         return new Book(id, title, new Author(authorId, authorName), new Genre(genreId, genreName));
     }
