@@ -24,7 +24,8 @@
                         rows += '<tr>' + '<td>' + book.id + '</td>'
                          + '<td>' + book.title + '</td>'
                           + '<td>' + book.authorName + '</td>'
-                          + '<td>' + book.genreName + '</td>' + '</tr>';
+                          + '<td>' + book.genreName + '</td>'
+                          + '<td>' + '<a href=\"bookEdit.html?id=' + book.id + '\">Edit</a>' + '</td>' + '</tr>';
                     });
                     tableBody.innerHTML = rows;
                 });
@@ -34,6 +35,7 @@
 <body onload="loadAllBooks();">
     <h1>Books:</h1>
 
+    <a href="bookEdit.html">Create new book</a>
     <table id="booksTable" class="books">
         <thead>
         <tr>

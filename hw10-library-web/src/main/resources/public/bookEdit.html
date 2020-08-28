@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Book edit</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function loadBookById() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (id) {
+                fetch('/api/book/' + id)
+                    .then(response => response.json())
+                    .then(book => {
+                        idInput.value = book.id;
+                        titleInput.value = book.title;
+                        authorSelector.value = book.authorId;
+                        genreSelector.value = book.genreId;
+                    });
+            }
+        }
+
+        function loadSelectors() {
+            fetch('/api/author')
+                .then(response => response.json())
+                .then(authors => {
+                    authors.forEach((author, idx) => {
+                        let option = document.createElement('option');
+                        option.text = author.fullName;
+                        option.value = author.id;
+                        authorSelector.add(option, null);
+                    })
+                });
+            fetch('/api/genre')
+                .then(response => response.json())
+                .then(genres => {
+                    genres.forEach((genre, idx) => {
+                        let option = document.createElement('option');
+                        option.text = genre.name;
+                        option.value = genre.id;
+                        genreSelector.add(option, null);
+                    })
+                });
+
+        }
+
+        function saveBook(form) {
+            fetch('/api/book', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                  },
+                  body: extractBookJson(form)
+                }).then(res => {
+                    if (res.status >= 500) {
+                        alert('Error on save book');
+                        console.log(res);
+                    } else {
+                        location.href = 'index.html';
+                    }
+                })
+                  .catch(res => {
+                    alert('Error');
+                    console.log(res)
+                  });
+        }
+
+        function extractBookJson(form) {
+            let userObj = objectFromForm(form);
+            return JSON.stringify(userObj);
+        }
+
+        function objectFromForm(form) {
+            let object = {};
+            let formData = new FormData(form);
+            formData.forEach((value, key) => {object[key] = value});
+
+            return object;
+        }
+    </script>
+</head>
+
+<body onload="loadSelectors(); loadBookById();">
+    <h1>Book edit:</h1>
+    <form id="bookForm" onsubmit="saveBook(this); return false;" action="#" autocomplete="off">
+        <div class="row">
+            <label for="idInput">ID:</label>
+            <input id="idInput" type="text" readonly="readonly" name="id"/>
+        </div>
+
+        <div class="row">
+            <label for="titleInput">Title:</label>
+            <input id="titleInput" name="title" type="text"/>
+        </div>
+
+        <div class="row">
+            <label for="authorSelector">Author:</label>
+            <select id="authorSelector" name="authorId">
+            </select>
+        </div>
+
+        <div class="row">
+            <label for="genreSelector">Genre:</label>
+            <select id="genreSelector" name="genreId">
+            </select>
+        </div>
+
+        <div class="row">
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</body>
+</html>
