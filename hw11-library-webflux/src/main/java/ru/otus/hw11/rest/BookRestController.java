@@ -26,15 +26,15 @@ public class BookRestController {
     @GetMapping("/api/book/{id}")
     public Mono<ResponseEntity<BookDto>> getBookById(@PathVariable String id) {
         return bookService.find(id)
-                .map(ResponseEntity::ok)
+                .flatMap(bookDto -> Mono.fromSupplier(() -> ResponseEntity.ok(bookDto)))
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/book")
-    public Mono<ResponseEntity<Object>> saveBook(@RequestBody BookDto data) {
+    public Mono<ResponseEntity<BookDto>> saveBook(@RequestBody BookDto data) {
         return bookService.save(data.toBook())
-            .flatMap(bookDto -> Mono.just(new ResponseEntity<>(HttpStatus.CREATED)))
-            .doOnError(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .flatMap(bookDto -> Mono.fromSupplier(() -> ResponseEntity.status(HttpStatus.CREATED).body(bookDto)))
+            .doOnError(error -> Mono.fromSupplier(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.TEXT_HTML)
                 .body(error.getMessage())));
 
