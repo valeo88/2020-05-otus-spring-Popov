@@ -27,8 +27,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public Flux<BookDto> getAll() {
-        return bookRepository.findAll()
-                .map(BookDto::fromBook);
+        return bookRepository.findAll().map(BookDto::fromBook);
     }
 
     @Transactional(readOnly = true)
@@ -50,15 +49,14 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Mono<Void> delete(Book book) {
-        commentRepository.deleteAll(commentRepository.findByBook(book));
-        return bookRepository.deleteById(book.getId());
+        return commentRepository.deleteAll(commentRepository.findByBook(book))
+                .zipWith(bookRepository.deleteById(book.getId())).then();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Flux<CommentDto> getComments(Book book) {
-        return commentRepository.findByBook(book)
-                .map(CommentDto::fromComment);
+        return commentRepository.findByBook(book).map(CommentDto::fromComment);
     }
 
     @Transactional
