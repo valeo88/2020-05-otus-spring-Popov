@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      database: myDb
+      port: 0
+
+logging:
+  level:
+    root: INFO
+
+mongock:
+  change-logs-scan-package:
+    - ru.otus.hw11.init

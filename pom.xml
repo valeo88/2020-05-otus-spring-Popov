@@ -30,6 +30,7 @@
         <module>hw08-library</module>
         <module>hw09-library-web</module>
         <module>hw10-library-web</module>
+        <module>hw11-library-webflux</module>
     </modules>
 
     <properties>

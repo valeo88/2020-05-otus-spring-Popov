@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books, .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+    <script>
+        function loadAllBooks() {
+            fetch('/api/book')
+                .then(response => response.json())
+                .then(books => {
+                    let tableBody = booksTable.getElementsByTagName('tbody')[0];
+                    let rows = '';
+                    books.forEach((book, idx) => {
+                        rows += '<tr>' + '<td>' + book.id + '</td>'
+                         + '<td>' + book.title + '</td>'
+                          + '<td>' + book.authorName + '</td>'
+                          + '<td>' + book.genreName + '</td>'
+                          + '<td>' + '<a href=\"bookEdit.html?id=' + book.id + '\">Edit</a>' + '</td>' + '</tr>';
+                    });
+                    tableBody.innerHTML = rows;
+                });
+        }
+    </script>
+</head>
+<body onload="loadAllBooks();">
+    <h1>Books:</h1>
+
+    <a href="bookEdit.html">Create new book</a>
+    <table id="booksTable" class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+        </tr>
+        </thead>
+        <tbody>
+            <!-- rows with books will be loaded here -->
+        </tbody>
+    </table>
+</body>
+</html>
