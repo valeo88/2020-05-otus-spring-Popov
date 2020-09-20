@@ -31,6 +31,7 @@
         <module>hw09-library-web</module>
         <module>hw10-library-web</module>
         <module>hw11-library-webflux</module>
+        <module>hw12-library-web-auth</module>
     </modules>
 
     <properties>
