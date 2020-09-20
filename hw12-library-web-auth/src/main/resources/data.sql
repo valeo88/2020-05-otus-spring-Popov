@@ -12,3 +12,5 @@ insert into BOOK(ID, NAME, AUTHOR_ID, GENRE_ID) values (4, 'My life is done', 3,
 
 insert into COMMENT(ID, "VALUE", BOOK_ID) values (1, 'So cooolll', 1);
 insert into COMMENT(ID, "VALUE", BOOK_ID) values (2, 'So cooolll 2', 1);
+
+insert into "USER"(ID, LOGIN, PASSWORD) values (1, 'admin', 'admin');
