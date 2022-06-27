@@ -12,7 +12,7 @@
     <artifactId>hw11-library-webflux</artifactId>
 
     <properties>
-        <mongodb.driver-sync.version>4.0.2</mongodb.driver-sync.version>
+        <mongodb.driver-sync.version>4.0.6</mongodb.driver-sync.version>
         <mongodb.spring-data.v3.version>3.0.0.RELEASE</mongodb.spring-data.v3.version>
     </properties>
 
